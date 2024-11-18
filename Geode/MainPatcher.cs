@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,9 @@ using System.Collections;
 using BepInEx;
 using BepInEx.Logging;using VehicleFramework.VehicleTypes;
 using VehicleFramework;
+using UnityEngine.Assertions;
+using UWE;
+using VehicleFramework.Assets;
 
 namespace Geodesubs
 {
@@ -18,10 +21,6 @@ namespace Geodesubs
     public class MainPatcher : BaseUnityPlugin
     {
 
-        public void Awake()
-        {
-            Geode.GetAssets();
-        }
 
         public void Start()
         {
@@ -33,8 +32,11 @@ namespace Geodesubs
 
         public static IEnumerator Register()
         {
-            Submersible newsub = Geode.model.EnsureComponent<Geode>() as Submersible;
-            yield return UWE.CoroutineHost.StartCoroutine(VehicleRegistrar.RegisterVehicle(newsub));
+            Geode.GetAssets();
+            Submarine geode = Geode.model.EnsureComponent<geode>();
+            geode.name = "Geode";
+            yield return CoroutineHost.StartCoroutine(VehicleRegistrar.RegisterVehicle(geode));
+            yield break;
         }
 
     }
